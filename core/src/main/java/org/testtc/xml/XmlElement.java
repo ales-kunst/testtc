@@ -1,25 +1,43 @@
 package org.testtc.xml;
 
-public abstract class XmlElement {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-    private final String name;
-    private String value;
+public class XmlElement extends XmlNode<XmlElement> {
 
-    public XmlElement(String name) {
-        this.name = name;
-        this.value = null;
+    private final XmlElement parent;
+    private final List<XmlElement> children;
+    private final List<XmlAttribute> attributes;
+
+    public XmlElement(String name, XmlElement parent) {
+        super(name, parent);
+        this.parent = parent;
+        this.children = new ArrayList<>();
+        this.attributes = new ArrayList<>();
+        if (parent != null) {
+            parent.addChild(this);
+        }
     }
 
-    public String getName() {
-        return name;
+    public boolean isRoot() {
+        return parent == null;
     }
 
-    public String getValue() {
-        return value;
+    public XmlElement getParent() {
+        return parent;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public List<XmlElement> getChildren() { return Collections.unmodifiableList(children); }
+
+    public boolean addChild(XmlElement childTag) {
+        return children.add(childTag);
     }
 
+    public List<XmlAttribute> getAttributes() { return Collections.unmodifiableList(attributes); }
+
+    public boolean addAttribute(String name, String value) {
+        return attributes.add(new XmlAttribute(name, value, this));
+    }
 }
