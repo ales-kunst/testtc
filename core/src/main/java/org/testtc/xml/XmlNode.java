@@ -21,7 +21,7 @@ public abstract class XmlNode<P> {
     }
 
     public String getValue() {
-        return value.toString();
+        return value;
     }
 
     public void setValue(String value) {

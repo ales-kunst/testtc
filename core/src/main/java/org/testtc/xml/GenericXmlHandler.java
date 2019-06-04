@@ -25,10 +25,6 @@ public class GenericXmlHandler extends org.xml.sax.helpers.DefaultHandler {
     }
 
     @Override
-    public void startDocument() throws SAXException {
-    }
-
-    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         LOG.info("Start element {}...", localName);
         XmlElement parent = null;

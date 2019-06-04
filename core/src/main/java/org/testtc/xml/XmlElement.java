@@ -3,7 +3,6 @@ package org.testtc.xml;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class XmlElement extends XmlNode<XmlElement> {
 
@@ -23,10 +22,6 @@ public class XmlElement extends XmlNode<XmlElement> {
 
     public boolean isRoot() {
         return parent == null;
-    }
-
-    public XmlElement getParent() {
-        return parent;
     }
 
     public List<XmlElement> getChildren() { return Collections.unmodifiableList(children); }
