@@ -16,7 +16,11 @@ public class XmlDocument {
         return xmlElements.add(xmlElement);
     }
 
+    public int getXmlElementsSize() { return xmlElements.size(); }
+
     public List<XmlElement> getXmlElements() {
         return Collections.unmodifiableList(xmlElements);
     }
+
+    public XmlElement getXmlElement(int index) { return xmlElements.get(index); }
 }

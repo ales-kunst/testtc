@@ -1,6 +1,6 @@
 package org.testtc.config;
 
-public interface Configuration<K> {
+public interface Configuration<K extends Enum> {
 
     <T> T get(K key);
 

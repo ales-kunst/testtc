@@ -26,7 +26,6 @@ public class GenericXmlHandler extends org.xml.sax.helpers.DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        LOG.info("Start element {}...", localName);
         XmlElement parent = null;
         tmpContent = new StringBuilder();
         if (!xmlElementsStack.isEmpty()) {
@@ -44,7 +43,6 @@ public class GenericXmlHandler extends org.xml.sax.helpers.DefaultHandler {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        LOG.info("End element {}...");
         if (!xmlElementsStack.isEmpty()) {
             XmlElement xmlElement = xmlElementsStack.pop();
             xmlElement.setValue(tmpContent.toString());
@@ -53,7 +51,10 @@ public class GenericXmlHandler extends org.xml.sax.helpers.DefaultHandler {
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        LOG.info("Content {}", new String(ch, start, length));
-        tmpContent.append(new String(ch, start, length));
+        String content = new String(ch, start, length);
+        boolean shouldAppend = !content.trim().isEmpty();
+        if (shouldAppend) {
+            tmpContent.append(new String(ch, start, length));
+        }
     }
 }
