@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class CallbackContainer {
 
-    private static final CallbackFunction DO_NOTHING_CALLBACK = new DoNothingCallback();
     private final Map<String, CallbackFunction> callbacks;
 
     private CallbackContainer(Map<String, CallbackFunction> callbacks) {
@@ -17,7 +16,7 @@ public class CallbackContainer {
     }
 
     public CallbackFunction getCallback(String name) {
-        return callbacks.getOrDefault(name, DO_NOTHING_CALLBACK);
+        return callbacks.get(name);
     }
 
     public static class Builder {

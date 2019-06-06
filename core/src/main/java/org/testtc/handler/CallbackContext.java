@@ -22,7 +22,7 @@ public class CallbackContext {
     }
 
     public List<Result> getResult(String key) {
-        List<Result> results = callbackResults.stream().filter(result -> result.equals(key)).collect(Collectors.toList());
+        List<Result> results = callbackResults.stream().filter(result -> result.getKey().equals(key)).collect(Collectors.toList());
         return Collections.unmodifiableList(results);
     }
 

@@ -1,8 +1,10 @@
 package org.testtc.handler;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testtc.xml.XmlDocument;
+import org.testtc.xml.XmlElement;
 import org.testtc.xml.XmlParser;
 import org.xml.sax.SAXException;
 
@@ -18,7 +20,8 @@ class CallbackExecutorTest {
     private XmlDocument xmlDocument;
     private CallbackContainer emptyCallbackContainer;
     private CallbackContainer callbackContainer;
-    private CallbackContainer testCallbackContainer;
+    private CallbackExecutor emptyCallbackExecutor;
+    private CallbackExecutor callbackExecutor;
 
     @BeforeEach
     void setUp() throws ParserConfigurationException, SAXException, IOException {
@@ -26,15 +29,61 @@ class CallbackExecutorTest {
         xmlDocument = XmlParser.parse(new File(url.getFile()));
         emptyCallbackContainer = CallbackContainer.builder().build();
 
-        testCallbackContainer = CallbackContainer.builder()
-                .add(TcSteps.TCINMP.val(), xml -> ReturnCode.WARNING)
-                .add(TcSteps.ZSVS01.val(), xml -> ReturnCode.ERROR)
-                .add(TcSteps.TCTS03.val(), xml -> ReturnCode.FATAL).build();
+        callbackContainer = CallbackContainer.builder()
+                .add(TcSteps.BFTC01.val(), getBFTC01Function())
+                .add(TcSteps.TCINMP.val(), getTCINMPFunction())
+                .add(TcSteps.ZSVS01.val(), getZSVS01Function())
+                .add(TcSteps.TCTS03.val(), getTCTS03Function()).build();
+        emptyCallbackExecutor = new CallbackExecutor(emptyCallbackContainer, getDoNothingFunction());
+        callbackExecutor = new CallbackExecutor(callbackContainer, getDoNothingFunction());
+    }
+
+    private CallbackFunction getBFTC01Function() {
+        return (xmlElem, ctx) -> {
+            ctx.addResult("BFTC01", "BFTC01 value");
+            return ReturnCode.OK;
+        };
+    }
+
+    private CallbackFunction getTCINMPFunction() {
+        return (xmlElem, ctx) -> {
+            ctx.addResult("TCINMP", "TCINMP value");
+            return ReturnCode.OK;
+        };
+    }
+
+    private CallbackFunction getZSVS01Function() {
+        return (xmlElem, ctx) -> {
+            ctx.addResult("ZSVS01", "ZSVS01 value");
+            return ReturnCode.OK;
+        };
+    }
+
+    private CallbackFunction getTCTS03Function() {
+        return (xmlElem, ctx) -> {
+            ctx.addResult("TCTS03", "TCTS03 value");
+            return ReturnCode.OK;
+        };
+    }
+
+    private CallbackFunction getDoNothingFunction() {
+        return (xmlElem, ctx) -> {
+            ctx.addResult("Nothing processed", "Nothing processed");
+            return ReturnCode.OK;
+        };
     }
 
     @Test
     void execute() {
+        CallbackContext ctx = new CallbackContext();
+        emptyCallbackExecutor.execute(xmlDocument.getXmlElement(0), ctx);
+        Assertions.assertEquals(1, ctx.getResults().size());
+        String msg = ctx.getResult("Nothing processed").get(0).getValue();
+        Assertions.assertEquals(1, ctx.getResult("Nothing processed").size());
+        Assertions.assertEquals("Nothing processed", msg);
 
+        ctx = new CallbackContext();
+        callbackExecutor.execute(xmlDocument.getXmlElement(0), ctx);
     }
 }
 
