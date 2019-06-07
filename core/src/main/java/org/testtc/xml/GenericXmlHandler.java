@@ -1,7 +1,5 @@
 package org.testtc.xml;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -9,8 +7,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class GenericXmlHandler extends org.xml.sax.helpers.DefaultHandler {
-    private static final Logger LOG = LogManager.getLogger(GenericXmlHandler.class.getName());
-
     private final XmlDocument xmlDocument;
     private final Deque<XmlElement> xmlElementsStack;
     private StringBuilder tmpContent;
